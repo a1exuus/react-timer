@@ -1,23 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import { useRef } from 'react';
+import Timer from './components/Timer';
+import { Button } from './components/Button';
 
 function App() {
+  const incTimerRef = useRef(null);
+
+  const handleGetFunction = (fn) => {
+    incTimerRef.current = fn;
+  };
+
+  // Функция для клика по кнопке "+"
+  const handlePlusClick = () => {
+    if (incTimerRef.current) {
+      incTimerRef.current();
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>React Redux Timer</h1>
+      
+      <Timer getIncrementFunction={handleGetFunction} />
+      
+      <Button value='+' clicked={handlePlusClick} />
+      <Button value='Start' />
+      <Button value='Stop' />
+      <Button value='Reset' />
+      <Button value='-' />
     </div>
   );
 }

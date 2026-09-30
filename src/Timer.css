@@ -1,9 +1,6 @@
-.App {
-    text-align: center;
-}
-
-.header {
+.timer {
     font-size: 50px;
     display: block;
     margin-bottom: 30px;
+    color:blue;
 }
