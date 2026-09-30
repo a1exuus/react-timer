@@ -1,8 +1,8 @@
 import '../Button.css'
 
-function Button({ value }) {
+function Button({ value, clicked }) {
     return (
-        <button>{ value }</button>
+        <button onClick={clicked}>{ value }</button>
     )
 }
 

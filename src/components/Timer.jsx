@@ -1,7 +1,7 @@
 import '../Timer.css'
-import { onIncrement } from '../redux/actions';
+import { onIncrement, onDecrement, onCountdown } from '../redux/actions';
 import { connect } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function Timer(props) {
     const { h, m, s } = timeFormatter(props.time);
@@ -12,11 +12,32 @@ function Timer(props) {
         }
     };
 
+    const decTimer = () => {
+        if (props.seconds > 0 && timer === 0) {
+            props.decrement(secondsToTime);
+        }
+    };
+
+    function countDown(props) {
+        return props.countDown(secondsToTime);
+    }
+
+    const startTimer = () => {
+        if (props.seconds > 0 && timer === 0) {
+            setTimer(setInterval(countDown, 1000));
+        }
+    };
+
     useEffect(() => {
         if (props.getIncrementFunction) {
             props.getIncrementFunction(incTimer);
         }
+        if (props.getDecrementFunction) {
+            props.getDecrementFunction(decTimer);
+        }
     }, [props.seconds]);
+
+    const [timer, setTimer] = useState(0);
 
     return (
         <div className="timer-container">
@@ -35,6 +56,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         increment: (fn) => dispatch(onIncrement(fn)),
+        decrement: (fn) => dispatch(onDecrement(fn)),
+        countdown: (fn) => dispatch(onCountdown(fn)),
     }
 }
 

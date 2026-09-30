@@ -1,4 +1,4 @@
-import { INCREMENT } from './types'
+import { INCREMENT, DECREMENT, COUNTDOWN } from './types'
 
 const initialState = {
   time: {
@@ -14,8 +14,20 @@ export const reducer = (state = initialState, action) => {
         case INCREMENT:
             return { 
                 ...state, 
-                seconds: initialState.seconds + 60,  
+                seconds: state.seconds + 60,
                 time: action.payload(state.seconds + 60) 
+            };
+        case DECREMENT:
+            return { 
+                ...state, 
+                seconds: state.seconds - 60,
+                time: action.payload(state.seconds - 60) 
+            };
+        case COUNTDOWN:
+            return {
+                ...state,
+                seconds: state.seconds - 1,
+                time: action.payload(state.seconds - 1)
             };
         default:
             return state;
