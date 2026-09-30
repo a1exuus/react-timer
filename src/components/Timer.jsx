@@ -1,10 +1,12 @@
 import '../Timer.css'
-import { onIncrement, onDecrement, onCountdown } from '../redux/actions';
+import { onIncrement, onDecrement, onCountdown, onReset } from '../redux/actions';
 import { connect } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 function Timer(props) {
     const { h, m, s } = timeFormatter(props.time);
+
+    const [timer, setTimer] = useState(0);
 
     const incTimer = () => {
         if (props.seconds >= 0) {
@@ -18,13 +20,28 @@ function Timer(props) {
         }
     };
 
-    function countDown(props) {
+    function countDown() {
         return props.countDown(secondsToTime);
     }
 
     const startTimer = () => {
         if (props.seconds > 0 && timer === 0) {
             setTimer(setInterval(countDown, 1000));
+        }
+    };
+
+    const stopTimer = () => {
+        if (props.seconds !== 0 && timer !== 0) {
+            clearInterval(timer);
+            setTimer(0);
+        }
+    };
+
+    const resetTimer = () => {
+        if (timer !== 0) {
+            clearInterval(timer);
+            setTimer(0);
+            props.reset();
         }
     };
 
@@ -35,9 +52,20 @@ function Timer(props) {
         if (props.getDecrementFunction) {
             props.getDecrementFunction(decTimer);
         }
+        if (props.getStartFunction) {
+            props.getStartFunction(startTimer);
+        }
+        if (props.getStopFunction) {
+            props.getStopFunction(stopTimer);
+        }
+        if (props.getResetFunction) {
+            props.getResetFunction(resetTimer);
+        }
+        if (props.seconds === 0 && timer !== 0) {
+            clearInterval(timer);
+            setTimer(0);
+        }
     }, [props.seconds]);
-
-    const [timer, setTimer] = useState(0);
 
     return (
         <div className="timer-container">
@@ -57,7 +85,8 @@ function mapDispatchToProps(dispatch) {
     return {
         increment: (fn) => dispatch(onIncrement(fn)),
         decrement: (fn) => dispatch(onDecrement(fn)),
-        countdown: (fn) => dispatch(onCountdown(fn)),
+        countDown: (fn) => dispatch(onCountdown(fn)),
+        reset: () => dispatch(onReset()),
     }
 }
 

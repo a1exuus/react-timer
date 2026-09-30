@@ -1,4 +1,4 @@
-import { INCREMENT, DECREMENT, COUNTDOWN } from './types'
+import { INCREMENT, DECREMENT, COUNTDOWN, RESET } from './types'
 
 const initialState = {
   time: {
@@ -28,6 +28,12 @@ export const reducer = (state = initialState, action) => {
                 ...state,
                 seconds: state.seconds - 1,
                 time: action.payload(state.seconds - 1)
+            };
+        case RESET:
+            return {
+                ...state,
+                seconds: 0,
+                time: { h: 0, m: 0, s: 0 }
             };
         default:
             return state;

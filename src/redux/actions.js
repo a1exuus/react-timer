@@ -1,4 +1,4 @@
-import { INCREMENT, DECREMENT, COUNTDOWN } from './types'
+import { INCREMENT, DECREMENT, COUNTDOWN, RESET } from './types'
 
 export const onIncrement = (fn) => {
     return {
@@ -18,5 +18,11 @@ export const onCountdown = (fn) => {
     return {
         type: COUNTDOWN,
         payload: fn
+    }
+}
+
+export const onReset = () => {
+    return {
+        type: RESET
     }
 }
